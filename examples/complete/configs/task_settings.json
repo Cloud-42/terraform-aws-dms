@@ -1,14 +1,24 @@
 {
   "TargetMetadata": {
+    "TargetSchema": "",
     "SupportLobs": true,
     "FullLobMode": false,
     "LobChunkSize": 64,
     "LimitedSizeLobMode": true,
-    "LobMaxSize": 32,
-    "BatchApplyEnabled": true
+    "LobMaxSize": 64,
+    "InlineLobMaxSize": 0,
+    "LoadMaxFileSize": 0,
+    "ParallelLoadThreads": 0,
+    "ParallelLoadBufferSize": 0,
+    "BatchApplyEnabled": false,
+    "TaskRecoveryTableEnabled": false,
+    "ParallelLoadQueuesPerThread": 0,
+    "ParallelApplyThreads": 0,
+    "ParallelApplyBufferSize": 0,
+    "ParallelApplyQueuesPerThread": 0
   },
   "FullLoadSettings": {
-    "TargetTablePrepMode": "DO_NOTHING",
+    "TargetTablePrepMode" : "DROP_AND_CREATE",
     "CreatePkAfterFullLoad": false,
     "StopTaskCachedChangesApplied": false,
     "StopTaskCachedChangesNotApplied": false,
@@ -17,9 +27,89 @@
     "CommitRate": 10000
   },
   "Logging": {
-    "EnableLogging": true
+    "EnableLogging" : true,
+    "LogComponents": [
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "DATA_STRUCTURE"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "COMMUNICATION"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "IO"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "COMMON"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "FILE_FACTORY"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "FILE_TRANSFER"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "REST_SERVER"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "ADDONS"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "TARGET_LOAD"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "TARGET_APPLY"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "SOURCE_UNLOAD"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "SOURCE_CAPTURE"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "TRANSFORMATION"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "SORTER"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "TASK_MANAGER"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "TABLES_MANAGER"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "METADATA_MANAGER"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "PERFORMANCE"
+      },
+      {
+        "Severity": "LOGGER_SEVERITY_DEFAULT",
+        "Id": "VALIDATOR_EXT"
+      }
+    ]
   },
   "ControlTablesSettings": {
+    "FullLoadExceptionTableEnabled" : false,
+    "ControlSchema": "",
     "HistoryTimeslotInMinutes": 5,
     "HistoryTableEnabled": false,
     "SuspendedTablesTableEnabled": false,
@@ -27,7 +117,36 @@
   },
   "StreamBufferSettings": {
     "StreamBufferCount": 3,
-    "StreamBufferSizeInMB": 8
+    "StreamBufferSizeInMB": 8,
+    "CtrlStreamBufferSizeInMB": 5
+  },
+  "ChangeProcessingDdlHandlingPolicy": {
+    "HandleSourceTableDropped": true,
+    "HandleSourceTableTruncated": true,
+    "HandleSourceTableAltered": true
+  },
+  "ErrorBehavior": {
+    "DataErrorPolicy": "LOG_ERROR",
+    "DataTruncationErrorPolicy": "LOG_ERROR",
+    "DataErrorEscalationPolicy": "SUSPEND_TABLE",
+    "DataErrorEscalationCount": 0,
+    "TableErrorPolicy": "SUSPEND_TABLE",
+    "TableErrorEscalationPolicy": "STOP_TASK",
+    "TableErrorEscalationCount": 0,
+    "RecoverableErrorCount": -1,
+    "RecoverableErrorInterval": 5,
+    "RecoverableErrorThrottling": true,
+    "RecoverableErrorThrottlingMax": 1800,
+    "RecoverableErrorStopRetryAfterThrottlingMax": false,
+    "ApplyErrorDeletePolicy": "IGNORE_RECORD",
+    "ApplyErrorInsertPolicy": "LOG_ERROR",
+    "ApplyErrorUpdatePolicy": "LOG_ERROR",
+    "ApplyErrorEscalationPolicy": "LOG_ERROR",
+    "ApplyErrorEscalationCount": 0,
+    "ApplyErrorFailOnTruncationDdl": false,
+    "FullLoadIgnoreConflicts": true,
+    "FailOnTransactionConsistencyBreached": false,
+    "FailOnNoTablesCaptured": false
   },
   "ChangeProcessingTuning": {
     "BatchApplyPreserveTransaction": true,
@@ -41,28 +160,26 @@
     "MemoryKeepTime": 60,
     "StatementCacheSize": 50
   },
-  "ChangeProcessingDdlHandlingPolicy": {
-    "HandleSourceTableDropped": true,
-    "HandleSourceTableTruncated": true,
-    "HandleSourceTableAltered": true
+  "ValidationSettings": {
+    "EnableValidation": true,
+    "ValidationMode": "ROW_LEVEL",
+    "ThreadCount": 5,
+    "FailureMaxCount": 10000,
+    "TableFailureMaxCount": 1000,
+    "HandleCollationDiff": false,
+    "ValidationOnly": false,
+    "RecordFailureDelayLimitInMinutes": 0,
+    "SkipLobColumns": false,
+    "ValidationPartialLobSize": 0,
+    "ValidationQueryCdcDelaySeconds": 0,
+    "PartitionSize": 10000,
+    "MaxKeyColumnSize" : 8096,
+    "RecordFailureDelayInMinutes" : 5,
+    "RecordSuspendDelayInMinutes" : 30
   },
-  "ErrorBehavior": {
-    "DataErrorPolicy": "LOG_ERROR",
-    "DataTruncationErrorPolicy": "LOG_ERROR",
-    "DataErrorEscalationPolicy": "SUSPEND_TABLE",
-    "DataErrorEscalationCount": 50,
-    "TableErrorPolicy": "SUSPEND_TABLE",
-    "TableErrorEscalationPolicy": "STOP_TASK",
-    "TableErrorEscalationCount": 50,
-    "RecoverableErrorCount": 0,
-    "RecoverableErrorInterval": 5,
-    "RecoverableErrorThrottling": true,
-    "RecoverableErrorThrottlingMax": 1800,
-    "ApplyErrorDeletePolicy": "IGNORE_RECORD",
-    "ApplyErrorInsertPolicy": "LOG_ERROR",
-    "ApplyErrorUpdatePolicy": "LOG_ERROR",
-    "ApplyErrorEscalationPolicy": "LOG_ERROR",
-    "ApplyErrorEscalationCount": 0,
-    "FullLoadIgnoreConflicts": true
-  }
+  "PostProcessingRules": null,
+  "CharacterSetSettings": null,
+  "LoopbackPreventionSettings": null,
+  "BeforeImageSettings": null,
+  "FailTaskWhenCleanTaskResourceFailed": false
 }
